@@ -5,12 +5,16 @@ def generate_path(name: str):
     return os.path.join('..', 'data', 'olympics', name)
 
 
+def encode_data(header, data):
+    return json.dumps(dict(zip(header, data))).encode('utf-8')
+
+
 def read_athletes():
     athletes = open(generate_path('olympic_athletes.csv'), 'r')
     reader = csv.reader(athletes, delimiter=',')
     header = next(reader, None)
     for athlete in reader:
-        yield json.dumps(dict(zip(header, athlete))).encode('utf-8')
+        yield encode_data(header, athlete)
 
 
 def read_hosts():
@@ -18,7 +22,7 @@ def read_hosts():
     reader = csv.reader(hosts, delimiter=',')
     header = next(reader, None)
     for host in reader:
-        yield json.dumps(dict(zip(header, host))).encode('utf-8')
+        yield encode_data(header, host)
 
 
 def read_medals():
@@ -26,7 +30,7 @@ def read_medals():
     reader = csv.reader(medals, delimiter=',')
     header = next(reader, None)
     for medal in reader:
-        yield json.dumps(dict(zip(header, medal))).encode('utf-8')
+        yield encode_data(header, medal)
 
 
 def read_results():
@@ -34,4 +38,4 @@ def read_results():
     reader = csv.reader(results, delimiter=',')
     header = next(reader, None)
     for result in reader:
-        yield json.dumps(dict(zip(header, result))).encode('utf-8')
+        yield encode_data(header, result)
