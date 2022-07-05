@@ -1,4 +1,4 @@
-import os
+
 
 from dotenv import load_dotenv
 env_path = os.path.join('..', '..', '.env')
