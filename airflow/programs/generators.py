@@ -2,7 +2,7 @@ import csv, json, os
 
 
 def generate_path(name: str):
-    return os.path.join('..', 'data', 'olympics', name)
+    return os.path.join('..', '..', 'data', 'olympics', name)
 
 
 def encode_data(header, data):
@@ -39,3 +39,9 @@ def read_results():
     header = next(reader, None)
     for result in reader:
         yield encode_data(header, result)
+
+
+athletes = read_athletes()
+hosts = read_hosts()
+medals = read_medals()
+results = read_results()
