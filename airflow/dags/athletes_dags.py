@@ -1,6 +1,7 @@
 import pendulum
 from airflow import DAG
 from kafka import KafkaAdminClient, KafkaProducer, KafkaConsumer
+from kafka.producer.future import FutureRecordMetadata, FutureProduceResult
 from airflow.operators.python_operator import PythonOperator
 from airflow.decorators import task, dag
 from datetime import datetime
@@ -8,8 +9,6 @@ import os, json, csv
 import logging
 
 logger = logging.getLogger()
-
-
 
 
 def read_athletes():
@@ -30,15 +29,16 @@ with DAG(
 ) as dag:
     @task
     def write_topic():
-        producer = KafkaProducer(bootstrap_servers='172.17.0.1:9092', api_version=(0, 10, 2))
-        val = next(athletes)
-        logger.info({val})
-        res = producer.send(topic="athletes", value=val)
+        producer = KafkaProducer(bootstrap_servers='kafka:9093', api_version=(0, 10, 2))
+        res: FutureRecordMetadata = producer.send(topic="athletes", value=next(athletes))
         logger.info("Wrote to topic athletes.")
-        logger.info(res)
-    
+        try:
+            record = res.get()
+            logger.info(record)
+        except Exception as e:
+            logger.info(e)    
 
-        # consumer = KafkaConsumer("athletes", group_id="consoomer", bootstrap_servers='172.17.0.1:9092', api_version=(0, 10, 2))
+        # consumer = KafkaConsumer("athletes", group_id="consoomer", bootstrap_servers='kafka:9093', api_version=(0, 10, 2))
         # consumer.subscribe(["athletes"])
         # logger.info(consumer.poll(timeout_ms=1000))
         # for m in consumer:
