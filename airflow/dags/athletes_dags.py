@@ -21,7 +21,7 @@ def read_athletes():
 athletes = read_athletes()
 
 with DAG(
-    schedule_interval=None,
+    schedule_interval="* * * * *",
     start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
     catchup=False,
     tags=['athletes'],
@@ -36,14 +36,6 @@ with DAG(
             record = res.get()
             logger.info(record)
         except Exception as e:
-            logger.info(e)    
-
-        # consumer = KafkaConsumer("athletes", group_id="consoomer", bootstrap_servers='kafka:9093', api_version=(0, 10, 2))
-        # consumer.subscribe(["athletes"])
-        # logger.info(consumer.poll(timeout_ms=1000))
-        # for m in consumer:
-        #     logger.info(m.value)
-        # consumer.close()
-        # logger.info("Message received")
+            logger.info(e)
 
     write_topic()

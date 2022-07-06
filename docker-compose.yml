@@ -198,25 +198,9 @@ services:
       KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "athletes:1:1,hosts:1:1,medals:1:1,results:1:1"
+      KAFKA_CREATE_TOPICS: "processed:1:1,athletes:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-
-  # init-kafka:
-  #   image: drewpc/kafka:latest
-  #   depends_on:
-  #     - kafka
-  #   entrypoint: [ '/bin/sh', '-c' ]
-  #   command: |
-  #     "
-  #     echo -e 'Creating kafka topics'
-  #     kafka-topics.sh --bootstrap-server kafka:9093 --create --if-not-exists --topic athletes --replication-factor 1 --partitions 1
-  #     kafka-topics.sh --bootstrap-server kafka:9093 --create --if-not-exists --topic hosts --replication-factor 1 --partitions 1
-  #     kafka-topics.sh --bootstrap-server kafka:9093 --create --if-not-exists --topic medals --replication-factor 1 --partitions 1
-
-  #     echo -e 'Successfully created the following topics:'
-  #     kafka-topics.sh --bootstrap-server kafka:29092 --list
-  #     "
 
 volumes:
   postgres-db-volume:
