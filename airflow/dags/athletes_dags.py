@@ -30,12 +30,6 @@ with DAG(
     @task
     def write_topic():
         producer = KafkaProducer(bootstrap_servers='kafka:9093', api_version=(0, 10, 2))
-        res: FutureRecordMetadata = producer.send(topic="athletes", value=next(athletes))
-        logger.info("Wrote to topic athletes.")
-        try:
-            record = res.get()
-            logger.info(record)
-        except Exception as e:
-            logger.info(e)
+        producer.send(topic="athletes", value=next(athletes))
 
     write_topic()
